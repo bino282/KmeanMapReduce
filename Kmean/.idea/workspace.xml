@@ -24,8 +24,8 @@
       <file leaf-file-name="Kmeans.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/Kmeans.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="356">
-              <caret line="141" column="48" selection-start-line="141" selection-start-column="48" selection-end-line="141" selection-end-column="48" />
+            <state relative-caret-position="3060">
+              <caret line="180" column="66" selection-start-line="180" selection-start-column="66" selection-end-line="180" selection-end-column="66" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#3497#3511#0" expanded="true" />
@@ -47,7 +47,7 @@
       <file leaf-file-name="ClusterCenter.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/model/ClusterCenter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="374">
+            <state relative-caret-position="119">
               <caret line="24" column="23" selection-start-line="24" selection-start-column="20" selection-end-line="24" selection-end-column="23" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -71,8 +71,8 @@
       <file leaf-file-name="DoubleVector.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/model/DoubleVector.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="336">
-              <caret line="48" column="41" selection-start-line="48" selection-start-column="35" selection-end-line="48" selection-end-column="41" />
+            <state relative-caret-position="544">
+              <caret line="38" column="25" selection-start-line="38" selection-start-column="25" selection-end-line="38" selection-end-column="25" />
               <folding>
                 <element signature="e#1241#1242#0" expanded="true" />
                 <element signature="e#1277#1278#0" expanded="true" />
@@ -620,20 +620,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/model/DoubleVector.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="336">
-          <caret line="48" column="41" selection-start-line="48" selection-start-column="35" selection-end-line="48" selection-end-column="41" />
-          <folding>
-            <element signature="e#1241#1242#0" expanded="true" />
-            <element signature="e#1277#1278#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/model/ClusterCenter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
+        <state relative-caret-position="119">
           <caret line="24" column="23" selection-start-line="24" selection-start-column="20" selection-end-line="24" selection-end-column="23" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -651,10 +640,21 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/model/DoubleVector.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="544">
+          <caret line="38" column="25" selection-start-line="38" selection-start-column="25" selection-end-line="38" selection-end-column="25" />
+          <folding>
+            <element signature="e#1241#1242#0" expanded="true" />
+            <element signature="e#1277#1278#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/Kmeans.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="356">
-          <caret line="141" column="48" selection-start-line="141" selection-start-column="48" selection-end-line="141" selection-end-column="48" />
+        <state relative-caret-position="3060">
+          <caret line="180" column="66" selection-start-line="180" selection-start-column="66" selection-end-line="180" selection-end-column="66" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#3497#3511#0" expanded="true" />

@@ -136,18 +136,18 @@ public class Kmeans {
         job.setJarByClass(map.class);
 
         FileInputFormat.addInputPath(job, in);
-        FileSystem fs = FileSystem.get(conf);
-        if (fs.exists(out)) {
-            fs.delete(out, true);
-        }
-
-        if (fs.exists(center)) {
-            fs.delete(out, true);
-        }
-
-        if (fs.exists(in)) {
-            fs.delete(in, true);
-        }
+//        FileSystem fs = FileSystem.get(conf);
+//        if (fs.exists(out)) {
+//            fs.delete(out, true);
+//        }
+//
+//        if (fs.exists(center)) {
+//            fs.delete(out, true);
+//        }
+//
+//        if (fs.exists(in)) {
+//            fs.delete(in, true);
+//        }
         FileOutputFormat.setOutputPath(job, out);
         job.setInputFormatClass(TextInputFormat.class);
         job.setOutputFormatClass(TextOutputFormat.class);
@@ -174,8 +174,8 @@ public class Kmeans {
             out = new Path(args[2]+"/output/data_out_" + iteration);
 
             FileInputFormat.addInputPath(job, in);
-            if (fs.exists(out))
-                fs.delete(out, true);
+//            if (fs.exists(out))
+//                fs.delete(out, true);
 
             FileOutputFormat.setOutputPath(job, out);
             job.setInputFormatClass(TextInputFormat.class);
