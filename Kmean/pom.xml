@@ -30,7 +30,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>main</mainClass>
+                            <mainClass>Kmeans</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
