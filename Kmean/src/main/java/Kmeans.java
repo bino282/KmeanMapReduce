@@ -5,6 +5,8 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FSDataOutputStream;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Reducer;
@@ -25,8 +27,7 @@ import java.util.List;
  * Created by bineau on 28/10/2016.
  */
 public class Kmeans {
-    private static final Logger LOG = LogManager.getLogger(Kmeans.class);
-    public static class map extends Mapper<ClusterCenter, DoubleVector,ClusterCenter,DoubleVector>{
+    public static class map extends Mapper<ClusterCenter,Text,ClusterCenter,DoubleVector>{
         private final List<ClusterCenter> centers=new ArrayList<ClusterCenter>();
         private DistanceMeasurer distanceMeasurer;
 
@@ -51,11 +52,13 @@ public class Kmeans {
 
         }
 
-        public void map(ClusterCenter key,DoubleVector value,Context context) throws IOException, InterruptedException {
+        public void map(ClusterCenter key,Text value,Context context) throws IOException, InterruptedException {
             ClusterCenter nearest=null;
+            String[] token=value.toString().split("\\s+");
+            DoubleVector vector=new DoubleVector(Double.parseDouble(token[0]),Double.parseDouble(token[1]));
             double nearestDistance=Double.MAX_VALUE;
             for (ClusterCenter c:centers){
-                double dis=distanceMeasurer.measureDistance(c,value);
+                double dis=distanceMeasurer.measureDistance(c,vector);
                 if(nearest==null){
                     nearest=c;
                     nearestDistance=dis;
@@ -67,13 +70,13 @@ public class Kmeans {
                     }
                 }
             }
-            context.write(nearest,value);
+            context.write(nearest,vector);
 
 
         }
     }
 
-    public static class Reduce extends Reducer<ClusterCenter,DoubleVector,ClusterCenter,DoubleVector> {
+    public static class Reduce extends Reducer<ClusterCenter,DoubleVector,Text,IntWritable> {
         public static enum Counter {
             CONVERGED
         }
@@ -92,7 +95,7 @@ public class Kmeans {
             ClusterCenter newCenter=new ClusterCenter(x,y,key.getClusterIndex());
             centers.add(newCenter);
             for (DoubleVector vector:vectorList){
-                context.write(newCenter,vector);
+                context.write(new Text(vector.getVector()[0]+" "+vector.getVector()[1]),new IntWritable(newCenter.getClusterIndex()));
             }
             if (newCenter.converged(key))
                 context.getCounter(Counter.CONVERGED).increment(1);
@@ -146,8 +149,8 @@ public class Kmeans {
         job.setInputFormatClass(TextInputFormat.class);
         job.setOutputFormatClass(TextOutputFormat.class);
 
-        job.setOutputKeyClass(ClusterCenter.class);
-        job.setOutputValueClass(DoubleVector.class);
+        job.setOutputKeyClass(TextOutputFormat.class);
+        job.setOutputValueClass(IntWritable.class);
 
         job.waitForCompletion(true);
 
@@ -174,8 +177,8 @@ public class Kmeans {
             FileOutputFormat.setOutputPath(job, out);
             job.setInputFormatClass(TextInputFormat.class);
             job.setOutputFormatClass(TextOutputFormat.class);
-            job.setOutputKeyClass(ClusterCenter.class);
-            job.setOutputValueClass(DoubleVector.class);
+            job.setOutputKeyClass(TextOutputFormat.class);
+            job.setOutputValueClass(IntWritable.class);
 
             job.waitForCompletion(true);
             iteration++;
