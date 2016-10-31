@@ -124,10 +124,10 @@ public class Kmeans {
         Configuration conf = new Configuration();
         conf.set("num.iteration", iteration + "");
         conf.addResource(new Path("/usr/local/hadoop/conf/core-site.xml"));
-        Path in = new Path("hdfs://localhost:50070/input/data.txt");
-        Path center = new Path("hdfs://localhost:50070/input/centroid.txt");
+        Path in = new Path(args[0]);
+        Path center = new Path(args[1]);
         conf.set("centroid.path", center.toString());
-        Path out = new Path("hdfs://localhost:50070/output/data_out_1");
+        Path out = new Path(args[2]+"/data_out_1");
         Job job=new Job(conf);
         job.setJobName("KMeans Clustering");
 
@@ -136,7 +136,7 @@ public class Kmeans {
         job.setJarByClass(map.class);
 
         FileInputFormat.addInputPath(job, in);
-        FileSystem fs = FileSystem.get(new URI("hdfs://localhost:50070"),conf);
+        FileSystem fs = FileSystem.get(conf);
         if (fs.exists(out)) {
             fs.delete(out, true);
         }
@@ -170,8 +170,8 @@ public class Kmeans {
             job.setReducerClass(Reduce.class);
             job.setJarByClass(map.class);
 
-            in = new Path("hdfs://localhost:50070/output/data_out_" + (iteration - 1) + "/");
-            out = new Path("hdfs://localhost:50070/output/data_out_" + iteration);
+            in = new Path(args[2]+"/data_out_" + (iteration - 1) + "/");
+            out = new Path(args[2]+"/output/data_out_" + iteration);
 
             FileInputFormat.addInputPath(job, in);
             if (fs.exists(out))
