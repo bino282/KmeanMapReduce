@@ -1,7 +1,6 @@
 import model.ClusterCenter;
 import model.DistanceMeasurer;
 import model.DoubleVector;
-import org.apache.commons.httpclient.URI;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FSDataOutputStream;
 import org.apache.hadoop.fs.FileSystem;
@@ -21,6 +20,8 @@ import org.apache.log4j.Logger;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -118,7 +119,7 @@ public class Kmeans {
 
     }
 
-    public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
+    public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException, URISyntaxException {
         int iteration=1;
         Configuration conf = new Configuration();
         conf.set("num.iteration", iteration + "");
@@ -135,7 +136,7 @@ public class Kmeans {
         job.setJarByClass(map.class);
 
         FileInputFormat.addInputPath(job, in);
-        FileSystem fs = FileSystem.get(conf);
+        FileSystem fs = FileSystem.get(new URI("hdfs://localhost:50070"),conf);
         if (fs.exists(out)) {
             fs.delete(out, true);
         }
