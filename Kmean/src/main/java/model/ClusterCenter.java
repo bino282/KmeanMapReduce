@@ -11,7 +11,6 @@ import java.io.IOException;
  */
 public class ClusterCenter implements WritableComparable<ClusterCenter> {
     private  DoubleVector center;
-    private int kTimeIncremented=1;
     private int clusterIndex;
 
     public ClusterCenter(){
@@ -21,6 +20,16 @@ public class ClusterCenter implements WritableComparable<ClusterCenter> {
     public ClusterCenter(DoubleVector center){
         super();
         this.center=center;
+    }
+    public ClusterCenter(double x,double y,int clusterIndex){
+        this.center=new DoubleVector(x,y);
+        this.clusterIndex=clusterIndex;
+    }
+    public final boolean converged(ClusterCenter c) {
+        return calculateError(c.getCenter()) > 0;
+    }
+    public final double calculateError(DoubleVector v) {
+        return Math.sqrt(Math.abs(Math.pow(center.getVector()[0]-v.getVector()[0],2)+Math.abs(Math.pow(center.getVector()[1]-v.getVector()[1],2))));
     }
 
     public DoubleVector getCenter() {

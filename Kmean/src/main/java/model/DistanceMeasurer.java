@@ -8,10 +8,11 @@ public class DistanceMeasurer {
         double sum = 0;
         int length = v.getVector().length;
         for (int i = 0; i < length; i++) {
-            sum += Math.abs(center.getCenter().getVector()[i]
+             double dis=Math.abs(center.getCenter().getVector()[i]
                     - v.getVector()[i]);
+            sum+=dis*dis;
         }
 
-        return sum;
+        return Math.sqrt(sum);
     }
 }

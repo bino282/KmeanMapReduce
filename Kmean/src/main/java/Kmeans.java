@@ -2,13 +2,9 @@ import model.ClusterCenter;
 import model.DistanceMeasurer;
 import model.DoubleVector;
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.FileStatus;
+import org.apache.hadoop.fs.FSDataOutputStream;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.io.DoubleWritable;
-import org.apache.hadoop.io.LongWritable;
-import org.apache.hadoop.io.SequenceFile;
-import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Reducer;
@@ -82,15 +78,38 @@ public class Kmeans {
             CONVERGED
         }
         private final List<ClusterCenter> centers = new ArrayList<ClusterCenter>();
-        public void reduce(ClusterCenter key,Iterable<DoubleVector> values,Context context){
+        public void reduce(ClusterCenter key,Iterable<DoubleVector> values,Context context) throws IOException, InterruptedException {
             List<DoubleVector> vectorList = new ArrayList<DoubleVector>();
-            DoubleVector newcenter=null;
+            double sumx=0;
+            double sumy=0;
             for(DoubleVector value:values){
                 vectorList.add(value);
-                if(newcenter==null){
-                    newcenter=value;
-                }
+                sumx+=value.getVector()[0];
+                sumy+=value.getVector()[1];
             }
+            double x=sumx*1.0/vectorList.size();
+            double y=sumx*1.0/vectorList.size();
+            ClusterCenter newCenter=new ClusterCenter(x,y,key.getClusterIndex());
+            centers.add(newCenter);
+            for (DoubleVector vector:vectorList){
+                context.write(newCenter,vector);
+            }
+            if (newCenter.converged(key))
+                context.getCounter(Counter.CONVERGED).increment(1);
+
+
+        }
+        protected void cleanup(Context context) throws IOException, InterruptedException {
+            super.cleanup(context);
+            Configuration conf = context.getConfiguration();
+            Path outPath = new Path(conf.get("centroid.path"));
+            FileSystem fs = FileSystem.get(conf);
+            fs.delete(outPath, true);
+            FSDataOutputStream fin = fs.create(outPath);
+            for(ClusterCenter center:centers) {
+                fin.writeUTF(String.valueOf(center.getCenter().getVector()[0]+" "+center.getCenter().getVector()[1])+" "+center.getClusterIndex());
+            }
+            fin.close();
         }
 
     }
@@ -99,10 +118,10 @@ public class Kmeans {
         int iteration=1;
         Configuration conf = new Configuration();
         conf.set("num.iteration", iteration + "");
-        Path in = new Path("path in");
-        Path center = new Path("path center");
+        Path in = new Path("/input/data.txt");
+        Path center = new Path("/input/centroid.txt");
         conf.set("centroid.path", center.toString());
-        Path out = new Path("path out");
+        Path out = new Path("/output/data_out_1");
         Job job=new Job(conf);
         job.setJobName("KMeans Clustering");
 
@@ -145,8 +164,8 @@ public class Kmeans {
             job.setReducerClass(Reduce.class);
             job.setJarByClass(map.class);
 
-            in = new Path("files/clustering/depth_" + (iteration - 1) + "/");
-            out = new Path("files/clustering/depth_" + iteration);
+            in = new Path("/output/data_out_" + (iteration - 1) + "/");
+            out = new Path("/output/data_out_" + iteration);
 
             FileInputFormat.addInputPath(job, in);
             if (fs.exists(out))
