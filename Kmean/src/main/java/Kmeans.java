@@ -121,10 +121,10 @@ public class Kmeans {
         int iteration=1;
         Configuration conf = new Configuration();
         conf.set("num.iteration", iteration + "");
-        Path in = new Path("/input/data.txt");
-        Path center = new Path("/input/centroid.txt");
+        Path in = new Path("hdfs://localhost:50070/input/data.txt");
+        Path center = new Path("hdfs://localhost:50070/input/centroid.txt");
         conf.set("centroid.path", center.toString());
-        Path out = new Path("/output/data_out_1");
+        Path out = new Path("hdfs://localhost:50070/output/data_out_1");
         Job job=new Job(conf);
         job.setJobName("KMeans Clustering");
 
@@ -167,8 +167,8 @@ public class Kmeans {
             job.setReducerClass(Reduce.class);
             job.setJarByClass(map.class);
 
-            in = new Path("/output/data_out_" + (iteration - 1) + "/");
-            out = new Path("/output/data_out_" + iteration);
+            in = new Path("hdfs://localhost:50070/output/data_out_" + (iteration - 1) + "/");
+            out = new Path("hdfs://localhost:50070/output/data_out_" + iteration);
 
             FileInputFormat.addInputPath(job, in);
             if (fs.exists(out))
