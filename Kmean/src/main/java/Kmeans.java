@@ -1,6 +1,7 @@
 import model.ClusterCenter;
 import model.DistanceMeasurer;
 import model.DoubleVector;
+import org.apache.commons.httpclient.URI;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FSDataOutputStream;
 import org.apache.hadoop.fs.FileSystem;
@@ -121,6 +122,7 @@ public class Kmeans {
         int iteration=1;
         Configuration conf = new Configuration();
         conf.set("num.iteration", iteration + "");
+        conf.addResource(new Path("/usr/local/hadoop/conf/core-site.xml"));
         Path in = new Path("hdfs://localhost:50070/input/data.txt");
         Path center = new Path("hdfs://localhost:50070/input/centroid.txt");
         conf.set("centroid.path", center.toString());
