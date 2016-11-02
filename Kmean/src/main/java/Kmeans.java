@@ -111,18 +111,18 @@ public class Kmeans {
 
 
         }
-        protected void cleanup(Context context) throws IOException, InterruptedException {
-            super.cleanup(context);
-            Configuration conf = context.getConfiguration();
-            Path outPath = new Path(conf.get("Centroid.path"));
-            FileSystem fs = FileSystem.get(conf);
-            fs.delete(outPath, true);
-            FSDataOutputStream fin = fs.create(outPath);
-            for(ClusterCenter center:centers) {
-                fin.writeUTF(String.valueOf(center.getCenter().getVector()[0]+" "+center.getCenter().getVector()[1])+" "+center.getClusterIndex());
-            }
-            fin.close();
-        }
+//        protected void cleanup(Context context) throws IOException, InterruptedException {
+//            super.cleanup(context);
+//            Configuration conf = context.getConfiguration();
+//            Path outPath = new Path(conf.get("Centroid.path"));
+//            FileSystem fs = FileSystem.get(conf);
+//            fs.delete(outPath, true);
+//            FSDataOutputStream fin = fs.create(outPath);
+//            for(ClusterCenter center:centers) {
+//                fin.writeUTF(String.valueOf(center.getCenter().getVector()[0]+" "+center.getCenter().getVector()[1])+" "+center.getClusterIndex());
+//            }
+//            fin.close();
+//        }
 
     }
 
