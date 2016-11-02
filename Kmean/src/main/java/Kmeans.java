@@ -152,7 +152,7 @@ public class Kmeans {
         job.setInputFormatClass(TextInputFormat.class);
         job.setOutputFormatClass(TextOutputFormat.class);
 
-        job.setOutputKeyClass(TextOutputFormat.class);
+        job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(IntWritable.class);
 
         job.waitForCompletion(true);
