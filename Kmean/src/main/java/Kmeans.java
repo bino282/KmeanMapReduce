@@ -44,11 +44,13 @@ public class Kmeans {
             line=br.readLine();
             while (line!=null){
                 String[] token=line.split("\\s+");
-                double x=Double.parseDouble(token[0]);
-                double y=Double.parseDouble(token[1]);
-                ClusterCenter clusterCenter=new ClusterCenter(new DoubleVector(x,y));
-                clusterCenter.setClusterIndex(index++);
-                centers.add(clusterCenter);
+                if(token[0]!=null && token[1]!=null) {
+                    double x = Double.parseDouble(token[0]);
+                    double y = Double.parseDouble(token[1]);
+                    ClusterCenter clusterCenter = new ClusterCenter(new DoubleVector(x, y));
+                    clusterCenter.setClusterIndex(index++);
+                    centers.add(clusterCenter);
+                }
                 line=br.readLine();
             }
             distanceMeasurer=new DistanceMeasurer();
