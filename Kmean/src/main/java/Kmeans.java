@@ -135,11 +135,12 @@ public class Kmeans {
         Path out = new Path(args[2]+"/data_out_1");
         Job job=new Job(conf);
         job.setJobName("KMeans Clustering");
+        job.setJarByClass(Kmeans.class);
 
         job.setMapperClass(Map.class);
         job.setReducerClass(Reduce.class);
 
-        FileInputFormat.addInputPath(job, in);
+
 //        FileSystem fs = FileSystem.get(conf);
 //        if (fs.exists(out)) {
 //            fs.delete(out, true);
@@ -152,6 +153,7 @@ public class Kmeans {
 //        if (fs.exists(in)) {
 //            fs.delete(in, true);
 //        }
+        FileInputFormat.addInputPath(job, in);
         FileOutputFormat.setOutputPath(job, out);
         job.setInputFormatClass(TextInputFormat.class);
         job.setOutputFormatClass(TextOutputFormat.class);
