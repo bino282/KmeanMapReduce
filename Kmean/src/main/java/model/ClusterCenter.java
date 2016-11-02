@@ -53,7 +53,6 @@ public class ClusterCenter implements WritableComparable<ClusterCenter> {
     }
 
     public void write(DataOutput dataOutput) throws IOException {
-
     }
 
     public void readFields(DataInput dataInput) throws IOException {
