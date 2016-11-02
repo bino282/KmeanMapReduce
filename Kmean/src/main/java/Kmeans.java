@@ -30,7 +30,7 @@ import java.util.List;
  * Created by bineau on 28/10/2016.
  */
 public class Kmeans {
-    public static class map extends Mapper<LongWritable,Text,ClusterCenter,DoubleVector>{
+    public static class Map extends Mapper<LongWritable,Text,ClusterCenter,DoubleVector>{
         private final List<ClusterCenter> centers=new ArrayList<ClusterCenter>();
         private DistanceMeasurer distanceMeasurer;
 
@@ -136,9 +136,8 @@ public class Kmeans {
         Job job=new Job(conf);
         job.setJobName("KMeans Clustering");
 
-        job.setMapperClass(map.class);
+        job.setMapperClass(Map.class);
         job.setReducerClass(Reduce.class);
-        job.setJarByClass(map.class);
 
         FileInputFormat.addInputPath(job, in);
 //        FileSystem fs = FileSystem.get(conf);
