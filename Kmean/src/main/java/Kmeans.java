@@ -139,7 +139,6 @@ public class Kmeans {
         job.setJarByClass(Kmeans.class);
 
         job.setMapperClass(Map.class);
-        job.setCombinerClass(Reduce.class);
         job.setReducerClass(Reduce.class);
 
 //        FileSystem fs = FileSystem.get(conf);
