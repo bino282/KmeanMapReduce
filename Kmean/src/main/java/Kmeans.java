@@ -108,7 +108,7 @@ public class Kmeans {
         protected void cleanup(Context context) throws IOException, InterruptedException {
             super.cleanup(context);
             Configuration conf = context.getConfiguration();
-            Path outPath = new Path(conf.get("centroid.path"));
+            Path outPath = new Path(conf.get("Centroid.path"));
             FileSystem fs = FileSystem.get(conf);
             fs.delete(outPath, true);
             FSDataOutputStream fin = fs.create(outPath);
@@ -126,7 +126,7 @@ public class Kmeans {
         conf.set("num.iteration", iteration + "");
         Path in = new Path(args[0]);
         Path center = new Path(args[1]);
-        conf.set("centroid.path", center.toString());
+        conf.set("Centroid.path", center.toString());
         Path out = new Path(args[2]+"/data_out_1");
         Job job=new Job(conf);
         job.setJobName("KMeans Clustering");
