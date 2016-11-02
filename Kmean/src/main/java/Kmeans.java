@@ -6,6 +6,7 @@ import org.apache.hadoop.fs.FSDataOutputStream;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.Mapper;
@@ -29,7 +30,7 @@ import java.util.List;
  * Created by bineau on 28/10/2016.
  */
 public class Kmeans {
-    public static class map extends Mapper<ClusterCenter,Text,ClusterCenter,DoubleVector>{
+    public static class map extends Mapper<LongWritable,Text,ClusterCenter,DoubleVector>{
         private final List<ClusterCenter> centers=new ArrayList<ClusterCenter>();
         private DistanceMeasurer distanceMeasurer;
 
@@ -54,7 +55,7 @@ public class Kmeans {
 
         }
 
-        public void map(ClusterCenter key,Text value,Context context) throws IOException, InterruptedException {
+        public void map(LongWritable key,Text value,Context context) throws IOException, InterruptedException {
             ClusterCenter nearest=null;
             String[] token=value.toString().split("\\s+");
             DoubleVector vector=new DoubleVector(Double.parseDouble(token[0]),Double.parseDouble(token[1]));
@@ -123,7 +124,6 @@ public class Kmeans {
         int iteration=1;
         Configuration conf = new Configuration();
         conf.set("num.iteration", iteration + "");
-        conf.addResource(new Path("/usr/local/hadoop/conf/core-site.xml"));
         Path in = new Path(args[0]);
         Path center = new Path(args[1]);
         conf.set("centroid.path", center.toString());
@@ -157,35 +157,35 @@ public class Kmeans {
 
         job.waitForCompletion(true);
 
-        long counter = job.getCounters().findCounter(Reduce.Counter.CONVERGED).getValue();
-        iteration++;
-        while (counter>0){
-            conf = new Configuration();
-            conf.set("centroid.path", center.toString());
-            conf.set("num.iteration", iteration + "");
-            job = new Job(conf);
-            job.setJobName("KMeans Clustering " + iteration);
-
-            job.setMapperClass(map.class);
-            job.setReducerClass(Reduce.class);
-            job.setJarByClass(map.class);
-
-            in = new Path(args[2]+"/data_out_" + (iteration - 1) + "/");
-            out = new Path(args[2]+"/output/data_out_" + iteration);
-
-            FileInputFormat.addInputPath(job, in);
-//            if (fs.exists(out))
-//                fs.delete(out, true);
-
-            FileOutputFormat.setOutputPath(job, out);
-            job.setInputFormatClass(TextInputFormat.class);
-            job.setOutputFormatClass(TextOutputFormat.class);
-            job.setOutputKeyClass(TextOutputFormat.class);
-            job.setOutputValueClass(IntWritable.class);
-
-            job.waitForCompletion(true);
-            iteration++;
-            counter = job.getCounters().findCounter(Reduce.Counter.CONVERGED).getValue();
-        }
+//        long counter = job.getCounters().findCounter(Reduce.Counter.CONVERGED).getValue();
+//        iteration++;
+//        while (counter>0){
+//            conf = new Configuration();
+//            conf.set("centroid.path", center.toString());
+//            conf.set("num.iteration", iteration + "");
+//            job = new Job(conf);
+//            job.setJobName("KMeans Clustering " + iteration);
+//
+//            job.setMapperClass(map.class);
+//            job.setReducerClass(Reduce.class);
+//            job.setJarByClass(map.class);
+//
+//            in = new Path(args[2]+"/data_out_" + (iteration - 1) + "/");
+//            out = new Path(args[2]+"/output/data_out_" + iteration);
+//
+//            FileInputFormat.addInputPath(job, in);
+////            if (fs.exists(out))
+////                fs.delete(out, true);
+//
+//            FileOutputFormat.setOutputPath(job, out);
+//            job.setInputFormatClass(TextInputFormat.class);
+//            job.setOutputFormatClass(TextOutputFormat.class);
+//            job.setOutputKeyClass(TextOutputFormat.class);
+//            job.setOutputValueClass(IntWritable.class);
+//
+//            job.waitForCompletion(true);
+//            iteration++;
+//            counter = job.getCounters().findCounter(Reduce.Counter.CONVERGED).getValue();
+//        }
     }
 }
