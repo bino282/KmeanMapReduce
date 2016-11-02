@@ -43,15 +43,14 @@ public class Kmeans {
             int index=0;
             line=br.readLine();
             while (line!=null){
-                String[] token=line.split(" ");
-                if(token.length>=2) {
-                    if (token[0] != null && token[1] != null) {
-                        double x = Double.parseDouble(token[0]);
-                        double y = Double.parseDouble(token[1]);
-                        ClusterCenter clusterCenter = new ClusterCenter(new DoubleVector(x, y));
-                        clusterCenter.setClusterIndex(index++);
-                        centers.add(clusterCenter);
-                    }
+                if (line.length()>2) {
+                    String[] token = line.split("\\s+");
+                    double x = Double.parseDouble(token[0]);
+                    double y = Double.parseDouble(token[1]);
+                    ClusterCenter clusterCenter = new ClusterCenter(new DoubleVector(x, y));
+                    clusterCenter.setClusterIndex(index++);
+                    centers.add(clusterCenter);
+
                 }
 
                 line=br.readLine();
@@ -62,23 +61,25 @@ public class Kmeans {
 
         public void map(LongWritable key,Text value,Context context) throws IOException, InterruptedException {
             ClusterCenter nearest=null;
-            String[] token=value.toString().split("\\s+");
-            DoubleVector vector=new DoubleVector(Double.parseDouble(token[0]),Double.parseDouble(token[1]));
-            double nearestDistance=Double.MAX_VALUE;
-            for (ClusterCenter c:centers){
-                double dis=distanceMeasurer.measureDistance(c,vector);
-                if(nearest==null){
-                    nearest=c;
-                    nearestDistance=dis;
-                }
-                else{
-                    if(nearestDistance>dis){
+            if(value.toString().length()>2){
+                String[] token=value.toString().split("\\s+");
+                DoubleVector vector=new DoubleVector(Double.parseDouble(token[0]),Double.parseDouble(token[1]));
+                double nearestDistance=Double.MAX_VALUE;
+                for (ClusterCenter c:centers){
+                    double dis=distanceMeasurer.measureDistance(c,vector);
+                    if(nearest==null){
                         nearest=c;
                         nearestDistance=dis;
                     }
+                    else{
+                        if(nearestDistance>dis){
+                        nearest=c;
+                        nearestDistance=dis;
+                        }
+                    }
                 }
-            }
             context.write(nearest,vector);
+            }
 
 
         }
@@ -140,7 +141,6 @@ public class Kmeans {
         job.setMapperClass(Map.class);
         job.setCombinerClass(Reduce.class);
         job.setReducerClass(Reduce.class);
-
 
 //        FileSystem fs = FileSystem.get(conf);
 //        if (fs.exists(out)) {
